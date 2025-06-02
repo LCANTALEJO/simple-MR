@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mixing Ratio Calculator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #1e1e1e;
+      color: #d3d3d3;
+      font-family: 'Inter', sans-serif;
+      position: relative;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.95rem;
+    }
+
+    input {
+      padding: 10px;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+    }
+
+    .side-by-side {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .side-by-side input {
+      width: 70px;
+    }
+
+    .results {
+      margin-top: 2rem;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .highlight {
+      font-size: 1.5rem;
+      color: #00ff00;
+      margin-top: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .logo {
+      width: 60px;
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      opacity: 0.2;
+    }
+
+    @media screen and (min-width: 600px) {
+      input {
+        max-width: 400px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Mixing Ratio Calculator</h1>
+
+  <div class="form-group">
+    <label>Enter the Mixing Ratio A:B by Weight</label>
+    <div class="side-by-side">
+      <input type="number" id="aRatio" placeholder="A" />
+      <span style="font-size: 2.2rem; line-height: 1;">•<br>•</span>
+      <input type="number" id="bRatio" placeholder="B" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="aWeight">Actual Weight of A-Component (g):</label>
+    <input type="number" id="aWeight" placeholder="e.g. 100" style="width: 100%;"/>
+  </div>
+
+  <div class="results" id="results">
+    <!-- Results will display here -->
+  </div>
+
+  <img src="assets/logo.png" class="logo" alt="Logo"/>
+
+  <script>
+    const aRatioEl = document.getElementById("aRatio");
+    const bRatioEl = document.getElementById("bRatio");
+    const aWeightEl = document.getElementById("aWeight");
+    const resultsEl = document.getElementById("results");
+
+    function calculate() {
+      const aRatio = parseFloat(aRatioEl.value);
+      const bRatio = parseFloat(bRatioEl.value);
+      const aWeight = parseFloat(aWeightEl.value);
+
+      if (!isNaN(aRatio) && !isNaN(bRatio) && !isNaN(aWeight)) {
+        const bWeight = (bRatio / aRatio) * aWeight;
+        const min = bWeight * 0.97;
+        const max = bWeight * 1.03;
+
+        resultsEl.innerHTML = `
+          <div>
+            <p><strong>Ideal B-Component Weight:</strong></p>
+            <p class="highlight">${bWeight.toFixed(2)} g</p>
+            <p><strong>Acceptable Range (±3%):</strong></p>
+            <p class="highlight">${min.toFixed(2)} g - ${max.toFixed(2)} g</p>
+          </div>
+        `;
+      } else {
+        resultsEl.innerHTML = "";
+      }
+    }
+
+    aRatioEl.addEventListener("input", calculate);
+    bRatioEl.addEventListener("input", calculate);
+    aWeightEl.addEventListener("input", calculate);
+  </script>
+</body>
+</html>
